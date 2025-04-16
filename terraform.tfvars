@@ -11,19 +11,9 @@ tags = {
 }
 ingress_ports = [
   {
-    port        = 22
-    description = "Allow SSH"
-    protocol    = "tcp"
-  },
-  {
     port        = 80
     description = "Allow HTTP"
     protocol    = "tcp"
-  },
-  {
-    port        = 80
-    description = "Allow HTTP"
-    protocol    = "udp"
   }
 ]
 
