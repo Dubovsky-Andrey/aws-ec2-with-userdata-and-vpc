@@ -1,4 +1,6 @@
-# AWS EC2 with VPC Infrastructure
+# AWS EC2 with UserData and VPC
+
+This Terraform project creates an AWS EC2 instance with custom UserData script in a dedicated VPC.
 
 ## Overview
 
@@ -13,13 +15,23 @@ This project provides Terraform configuration for deploying an AWS EC2 instance 
 ## Project Structure
 
 ```
-aws-ec2-with-vpc-simple/
-├── main.tf                 # Main infrastructure configuration
-├── variables.tf            # Variable definitions
-├── outputs.tf             # Output definitions
-├── provider.tf            # AWS provider configuration
-├── terraform.tfvars       # Variable values
-└── README.md             # Project documentation
+aws-ec2-with-userdata-and-vpc/
+├── modules/
+│   ├── ec2/
+│   │   ├── main.tf
+│   │   ├── outputs.tf
+│   │   ├── variables.tf
+│   │   └── scripts/
+│   │       └── user-data.sh
+│   └── vpc/
+│       ├── main.tf
+│       ├── outputs.tf
+│       └── variables.tf
+├── main.tf
+├── outputs.tf
+├── variables.tf
+├── terraform.tfvars
+└── README.md
 ```
 
 ## Features
@@ -31,42 +43,63 @@ aws-ec2-with-vpc-simple/
 - EC2 instance with specified AMI and instance type
 - Network ACLs and routing tables
 
+## Infrastructure Components
+
+- VPC with custom CIDR block (10.0.0.0/16)
+- Public subnet in us-east-1a
+- Internet Gateway for public internet access
+- Security Group with HTTP ingress
+- EC2 t4g.nano instance with UserData script
+- Route table for internet access
+
+## Module Structure
+
+### VPC Module
+
+- Creates VPC infrastructure
+- Manages subnet, internet gateway, and routing
+
+### EC2 Module
+
+- Handles instance deployment
+- Configures security groups
+- Implements UserData script
+
 ## Configuration
 
 ### Required Variables
 
 Update the following variables in `terraform.tfvars`:
 
-```
-aws_region     = "us-west-2"
-instance_type  = "t2.micro"
-vpc_cidr       = "10.0.0.0/16"
-public_subnet  = "10.0.1.0/24"
+```hcl
+aws_region = "us-east-1"
+ami        = "ami-05f417c208be02d4d"
+vpc_cidr   = "10.0.0.0/16"
 ```
 
 ## Deployment
 
 1. Initialize Terraform:
 
-```
+```bash
 terraform init
 ```
 
 2. Review the deployment plan:
 
-```
+```bash
 terraform plan
 ```
 
 3. Apply the configuration:
 
-```
+```bash
 terraform apply
 ```
 
 4. To destroy the infrastructure:
 
-```
+```bash
 terraform destroy
 ```
 
@@ -87,6 +120,20 @@ After successful deployment, you'll receive:
 - Monitor your AWS costs
 - Use tags for better resource management
 
+## Security
+
+Default security configuration:
+
+- Inbound: HTTP (port 80)
+- Outbound: All traffic allowed
+
+## Tags
+
+Resources are tagged with:
+
+- Environment: dev
+- Project: aws-ec2-with-userdata-and-vpc
+
 ## Troubleshooting
 
 Common issues and solutions:
@@ -105,3 +152,7 @@ Common issues and solutions:
 ## Support
 
 For issues and feature requests, please create an issue in the project repository.
+
+## License
+
+MIT License
