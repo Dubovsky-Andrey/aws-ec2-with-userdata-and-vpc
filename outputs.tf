@@ -19,11 +19,17 @@ output "vpc_id" {
 # Output the Subnet ID from the VPC module
 output "subnet_id" {
   description = "Subnet ID"
-  value       = module.vpc.subnet_id
+  value       = module.subnets.subnet_id
 }
 
 # Output the public IP address of the created EC2 instance
 output "public_ip" {
   description = "Public IP address of the created EC2 instance"
   value       = module.ec2.public_ip
+}
+
+# Output the public IP address of the created EC2 instance
+output "public_link" {
+  description = "Public link for the site"
+  value       = "http://${module.ec2.public_ip}"
 }
